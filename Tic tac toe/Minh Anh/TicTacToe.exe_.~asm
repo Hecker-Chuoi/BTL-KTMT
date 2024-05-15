@@ -1,0 +1,89 @@
+.model small
+.stack 100h
+.data
+endl db 13, 10, '$' ; ky tu xuong dong
+.code
+main proc
+mov ax, @data
+mov ds, ax
+
+; Chuyen doi che do man hinh sang che do 320x200 (256 mau) (13h)
+mov ah, 00h
+mov al, 13h
+int 10h
+
+; ve bang
+call draw_board
+
+; Cho phim bam de quay lai che do van ban
+mov ah, 00h
+int 16h; thay doi tu int 10h sang 16h de cho phim bam
+
+; Quay lai che do van ban
+mov ah, 00h
+mov al, 03h
+int 10h
+
+; Ket thuc chuong trinh
+mov ah, 4ch
+int 21h
+main endp
+
+draw_board proc
+; ve duong doc
+mov cx, 85       ; x = 85
+call draw_oyline
+mov cx, 135      ; x = 135
+call draw_oyline
+mov cx, 185      ; x = 185
+call draw_oyline
+mov cx, 235      ; x = 235
+call draw_oyline
+
+; ve duong ngang
+mov dx, 25       ; y = 25
+call draw_oxline
+mov dx, 75       ; y = 75
+call draw_oxline
+mov dx, 125      ; y = 125
+call draw_oxline
+mov dx, 175      ; y = 175
+call draw_oxline
+
+draw_oxline proc
+mov cx, 85 ; x bat dau tu 85
+mov ax, dx ; luu gia tri cua y
+draw_ox_loop:
+cmp cx, 235
+jge draw_oxline_end ; neu x >= 235 thi ket thuc
+;mov bx, cx
+;mov bh, 0
+mov ah, 0ch ; chuc nang ve pixel
+mov al, 15 ; mau trang
+int 10h
+inc cx ; x++
+jmp draw_ox_loop
+draw_oxline_end:
+ret
+draw_oxline endp
+
+draw_oyline proc
+mov dx, 25 ; y bat dau tu 0
+mov ax, cx ; luu gia tri cua x
+draw_oyline_loop:
+cmp dx, 175
+jge draw_oyline_end ; neu y >= 150 thi ket thuc
+;mov bx, cx
+;mov bh, 0
+mov ah, 0ch ; chuc nang ve pixel
+mov al, 15 ; mau trang
+int 10h
+inc dx ; ++y
+jmp draw_oyline_loop
+draw_oyline_end:
+ret
+draw_oyline endp
+
+
+
+; [SOURCE]: C:\emu8086\MySource\TicTacToe.asm

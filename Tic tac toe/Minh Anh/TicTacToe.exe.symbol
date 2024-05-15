@@ -1,0 +1,40 @@
+< THE SYMBOL TABLE >  TicTacToe.exe  --  emu8086 assembler version: 4.08 
+===================================================================================================
+Name                     	Offset    	Size      	Type      	Segment   
+===================================================================================================
+STACK                    	00000     	-5        	SEGMENT   	(ITSELF)  
+DATA                     	00010     	-5        	SEGMENT   	(ITSELF)  
+ENDL                     	00000     	1         	VAR       	data      
+CHARX                    	00003     	1         	VAR       	data      
+CHARO                    	0000B     	1         	VAR       	data      
+CODE                     	00012     	-5        	SEGMENT   	(ITSELF)  
+MAIN                     	00000     	-1        	NEAR      	code      
+DRAW_BOARD               	0001F     	-1        	NEAR      	code      
+DRAW_OXLINE              	0004F     	-1        	NEAR      	code      
+DRAW_OX_LOOP             	00054     	-1        	LABEL     	code      
+DRAW_OXLINE_END          	00063     	-1        	LABEL     	code      
+DRAW_OYLINE              	00064     	-1        	NEAR      	code      
+DRAW_OYLINE_LOOP         	00069     	-1        	LABEL     	code      
+DRAW_OYLINE_END          	00078     	-1        	LABEL     	code      
+CHECK_INPUT              	00079     	-1        	NEAR      	code      
+CASE_1                   	000A9     	-1        	LABEL     	code      
+CASE_2                   	000B1     	-1        	LABEL     	code      
+CASE_3                   	000B9     	-1        	LABEL     	code      
+CASE_4                   	000C1     	-1        	LABEL     	code      
+CASE_5                   	000C9     	-1        	LABEL     	code      
+CASE_6                   	000D1     	-1        	LABEL     	code      
+CASE_7                   	000D9     	-1        	LABEL     	code      
+CASE_8                   	000E1     	-1        	LABEL     	code      
+CASE_9                   	000E9     	-1        	LABEL     	code      
+EXIT                     	000F1     	-1        	LABEL     	code      
+INPUT_ERROR              	000F5     	-1        	LABEL     	code      
+DRAW_CHARACTER           	000F6     	-1        	NEAR      	code      
+DRAW_CHAR_ROW            	000FC     	-1        	LABEL     	code      
+DRAW_CHAR_COL            	00102     	-1        	LABEL     	code      
+SKIP_PIXEL               	0010F     	-1        	LABEL     	code      
+DRAW_X                   	00121     	-1        	NEAR      	code      
+DRAW_O                   	00128     	-1        	NEAR      	code      
+===================================================================================================
+[ 15/05/2024  --  11:08:01 SA ] 
+< END >
+ 

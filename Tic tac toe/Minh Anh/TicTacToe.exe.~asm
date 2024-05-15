@@ -1,0 +1,239 @@
+.model medium
+.stack 100h
+.data
+endl db 13, 10, '$' ; ky tu xuong dong
+; ky tu X
+charX db 10000001b
+db 01000010b
+db 00100100b
+db 00011000b
+db 00011000b
+db 00100100b
+db 01000010b
+db 10000001b
+
+charO db 00111100b
+db 01000010b
+db 10000001b
+db 10000001b
+db 10000001b
+db 10000001b
+db 01000010b
+db 00111100b
+.code
+main proc
+mov ax, @data
+mov ds, ax
+
+; Chuyen doi che do man hinh sang che do 320x200 (256 mau) (13h)
+mov ah, 00h
+mov al, 13h
+int 10h
+
+; ve bang
+call draw_board
+
+; nhap va kiem tra
+call check_input
+
+; Cho phim bam de quay lai che do van ban
+mov ah, 00h
+int 16h; thay doi tu int 10h sang 16h de cho phim bam
+
+; Quay lai che do van ban
+mov ah, 00h
+mov al, 03h
+int 10h
+
+; Ket thuc chuong trinh
+mov ah, 4ch
+int 21h
+main endp
+
+draw_board proc
+; ve duong doc
+mov cx, 130       ; x = 85
+call draw_oyline
+mov cx, 150      ; x = 135
+call draw_oyline
+mov cx, 170      ; x = 185
+call draw_oyline
+mov cx, 190      ; x = 235
+call draw_oyline
+
+; ve duong ngang
+mov dx, 70       ; y = 25
+call draw_oxline
+mov dx, 90       ; y = 75
+call draw_oxline
+mov dx, 110      ; y = 125
+call draw_oxline
+mov dx, 130      ; y = 175
+call draw_oxline
+
+draw_oxline proc
+mov cx, 130 ; x bat dau tu 85
+mov ax, dx ; luu gia tri cua y
+draw_ox_loop:
+cmp cx, 190
+jge draw_oxline_end ; neu x >= 235 thi ket thuc
+;mov bx, cx
+;mov bh, 0
+mov ah, 0ch ; chuc nang ve pixel
+mov al, 15 ; mau trang
+int 10h
+inc cx ; x++
+jmp draw_ox_loop
+draw_oxline_end:
+ret
+draw_oxline endp
+
+draw_oyline proc
+mov dx, 70 ; y bat dau tu 0
+mov ax, cx ; luu gia tri cua x
+draw_oyline_loop:
+cmp dx, 130
+jge draw_oyline_end ; neu y >= 150 thi ket thuc
+;mov bx, cx
+;mov bh, 0
+mov ah, 0ch ; chuc nang ve pixel
+mov al, 15 ; mau trang
+int 10h
+inc dx ; ++y
+jmp draw_oyline_loop
+draw_oyline_end:
+ret
+draw_oyline endp
+
+check_input proc
+; doc 1 ky tu tu ban phim
+mov ah, 1
+int 21h
+
+; kiem tra input 1-9
+cmp al, '1'
+jl input_error
+cmp al, '9'
+jg input_error
+
+cmp al, '1'
+je case_1
+
+cmp al, '2'
+je case_2
+
+cmp al, '3'
+je case_3
+
+cmp al, '4'
+je case_4
+
+cmp al, '5'
+je case_5
+
+cmp al, '6'
+je case_6
+
+cmp al, '7'
+je case_7
+
+cmp al, '8'
+je case_8
+
+cmp al, '9'
+je case_9
+
+case_1:
+mov cx, 136
+mov dx, 76
+jmp exit
+case_2:
+mov cx, 156
+mov dx, 76
+jmp exit
+case_3:
+mov cx, 176
+mov dx, 76
+jmp exit
+case_4:
+mov cx, 136
+mov dx, 96
+jmp exit
+case_5:
+mov cx, 156
+mov dx, 96
+jmp exit
+case_6:
+mov cx, 176
+mov dx, 96
+jmp exit
+case_7:
+mov cx, 136
+mov dx, 116
+jmp exit
+case_8:
+mov cx, 156
+mov dx, 116
+jmp exit
+case_9:
+mov cx, 176
+mov dx, 116
+jmp exit
+
+exit:
+call draw_o
+ret
+
+input_error:
+ret
+check_input endp
+
+draw_character proc
+push cx
+push dx
+push si
+
+mov di, 8         ; Chieu cao cua bitmap (8 dong)
+draw_char_row:
+mov bl, [si]      ; lay gia tri byte cua dong hien tai
+mov bh, 8         ; Chieu rong cua bitmap (8 cot)
+mov bp, cx        ; Luu lai x goc
+draw_char_col:
+test bl, 10000000b; kiem tra bit cao nhat trong dong hien tai
+jz skip_pixel     ; Neu bit là 0, bo qua dong
+mov ah, 0ch       ; Chuc nang ve pixel
+mov al, 15        ; Màu trang
+mov bh, 0
+int 10h
+skip_pixel:
+shl bl, 1         ; dich bit sang trai de kiem tra bit tiep theo
+inc cx            ; ++x
+dec bh            ; giam dem cot
+jnz draw_char_col ; tiep tuc ve neu con cot
+inc dx            ; ++y
+mov cx, bp        ; khoi phuc x goc
+inc si            ; chuyen sang dong tiep theo
+dec di            ; giam bien dem dong
+jnz draw_char_row ; neu con dong, tiep tuc ve
+
+pop si
+pop dx
+pop cx
+ret
+draw_character endp
+
+draw_x proc
+lea si, charX
+call draw_character
+ret
+draw_x endp
+
+draw_o proc
+lea si, charO
+call draw_character
+ret
+draw_o endp
+
+
+
+; [SOURCE]: C:\emu8086\MySource\TicTacToe.asm

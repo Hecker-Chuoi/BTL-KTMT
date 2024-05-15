@@ -1,0 +1,141 @@
+EMU8086 GENERATED LISTING. MACHINE CODE <- SOURCE.
+ 
+TicTacToe.exe_ -- emu8086 assembler version: 4.08  
+ 
+[ 15/05/2024  --  4:18:07 SA ] 
+ 
+===================================================================================================
+[LINE]     LOC: MACHINE CODE                          SOURCE
+===================================================================================================
+ 
+[   1]        :                                       .model small
+[   2]        :                                       .stack 100h
+[   3]        :                                       .data
+[   4]    0100: 0D 0A 24                              endl db 13, 10, '$' ; ky tu xuong dong
+[   5]        :                                       .code
+[   6]    0110:                                       main proc
+[   7]    0110: B8 10 00                              mov ax, @data
+[   8]    0113: 8E D8                                 mov ds, ax
+[   9]        :                                       
+[  10]        :                                       ; Chuyen doi che do man hinh sang che do 320x200 (256 mau) (13h)
+[  11]    0115: B4 00                                 mov ah, 00h
+[  12]    0117: B0 13                                 mov al, 13h
+[  13]    0119: CD 10                                 int 10h
+[  14]        :                                       
+[  15]        :                                       ; ve bang
+[  16]    011B: E8 0E 00                              call draw_board
+[  17]        :                                       
+[  18]        :                                       ; Cho phim bam de quay lai che do van ban
+[  19]    011E: B4 00                                 mov ah, 00h
+[  20]    0120: CD 16                                 int 16h; thay doi tu int 10h sang 16h de cho phim bam
+[  21]        :                                       
+[  22]        :                                       ; Quay lai che do van ban
+[  23]    0122: B4 00                                 mov ah, 00h
+[  24]    0124: B0 03                                 mov al, 03h
+[  25]    0126: CD 10                                 int 10h
+[  26]        :                                       
+[  27]        :                                       ; Ket thuc chuong trinh
+[  28]    0128: B4 4C                                 mov ah, 4ch
+[  29]    012A: CD 21                                 int 21h
+[  30]        :                                       main endp
+[  31]        :                                       
+[  32]    012C:                                       draw_board proc
+[  33]        :                                       ; ve duong doc
+[  34]    012C: B9 55 00                              mov cx, 85       ; x = 85
+[  35]    012F: E8 3F 00                              call draw_oyline
+[  36]    0132: B9 87 00                              mov cx, 135      ; x = 135
+[  37]    0135: E8 39 00                              call draw_oyline
+[  38]    0138: B9 B9 00                              mov cx, 185      ; x = 185
+[  39]    013B: E8 33 00                              call draw_oyline
+[  40]    013E: B9 EB 00                              mov cx, 235      ; x = 235
+[  41]    0141: E8 2D 00                              call draw_oyline
+[  42]        :                                       
+[  43]        :                                       ; ve duong ngang
+[  44]    0144: BA 19 00                              mov dx, 25       ; y = 25
+[  45]    0147: E8 12 00                              call draw_oxline
+[  46]    014A: BA 4B 00                              mov dx, 75       ; y = 75
+[  47]    014D: E8 0C 00                              call draw_oxline
+[  48]    0150: BA 7D 00                              mov dx, 125      ; y = 125
+[  49]    0153: E8 06 00                              call draw_oxline
+[  50]    0156: BA AF 00                              mov dx, 175      ; y = 175
+[  51]    0159: E8 00 00                              call draw_oxline
+[  52]        :                                       
+[  53]    015C:                                       draw_oxline proc
+[  54]    015C: B9 55 00                              mov cx, 85 ; x bat dau tu 85
+[  55]    015F: 8B C2                                 mov ax, dx ; luu gia tri cua y
+[  56]    0161:                                       draw_ox_loop:
+[  57]    0161: 81 F9 EB 00                           cmp cx, 235
+[  58]    0165: 7D 09                                 jge draw_oxline_end ; neu x >= 235 thi ket thuc
+[  59]        :                                       ;mov bx, cx
+[  60]        :                                       ;mov bh, 0
+[  61]    0167: B4 0C                                 mov ah, 0ch ; chuc nang ve pixel
+[  62]    0169: B0 0F                                 mov al, 15 ; mau trang
+[  63]    016B: CD 10                                 int 10h
+[  64]    016D: 41                                    inc cx ; x++
+[  65]    016E: EB F1                                 jmp draw_ox_loop
+[  66]    0170:                                       draw_oxline_end:
+[  67]    0170: C3                                    ret
+[  68]        :                                       draw_oxline endp
+[  69]        :                                       
+[  70]    0171:                                       draw_oyline proc
+[  71]    0171: BA 19 00                              mov dx, 25 ; y bat dau tu 0
+[  72]    0174: 8B C1                                 mov ax, cx ; luu gia tri cua x
+[  73]    0176:                                       draw_oyline_loop:
+[  74]    0176: 81 FA AF 00                           cmp dx, 175
+[  75]    017A: 7D 09                                 jge draw_oyline_end ; neu y >= 150 thi ket thuc
+[  76]        :                                       ;mov bx, cx
+[  77]        :                                       ;mov bh, 0
+[  78]    017C: B4 0C                                 mov ah, 0ch ; chuc nang ve pixel
+[  79]    017E: B0 0F                                 mov al, 15 ; mau trang
+[  80]    0180: CD 10                                 int 10h
+[  81]    0182: 42                                    inc dx ; ++y
+[  82]    0183: EB F1                                 jmp draw_oyline_loop
+[  83]    0185:                                       draw_oyline_end:
+[  84]    0185: C3                                    ret
+[  85]        :                                       draw_oyline endp
+[  86]        :                                       
+ 
+===================================================================================================
+ 
+EXE HEADER - bytes from 0000 to 01FF inclusive.
+
+0000: 4D      -   exe signature (M)
+0001: 5A      -   exe signature (Z)
+0002: 86      -   bytes on last page (l.byte)
+0003: 01      -   bytes on last page (h.byte)
+0004: 02      -   512 byte pages in file (l.byte)
+0005: 00      -   512 byte pages in file (h.byte)
+0006: 01      -   relocations (l.byte)
+0007: 00      -   relocations (h.byte)
+0008: 20      -   paragraphs in header (l.byte)
+0009: 00      -   paragraphs in header (h.byte)
+000A: 00      -   minimum memory (l.byte)
+000B: 00      -   minimum memory (h.byte)
+000C: FF      -   maximum memory (l.byte)
+000D: FF      -   maximum memory (h.byte)
+000E: 00      -   SS - stack segment (l.byte)
+000F: 00      -   SS - stack segment (h.byte)
+0010: 00      -   SP - stack pointer (l.byte)
+0011: 01      -   SP - stack pointer (h.byte)
+0012: D0      -   check sum (l.byte)
+0013: 36      -   check sum (h.byte)
+0014: 00      -   IP - instruction pointer (l.byte)
+0015: 00      -   IP - instruction pointer (h.byte)
+0016: 11      -   CS - code segment (l.byte)
+0017: 00      -   CS - code segment (h.byte)
+0018: 1E      -   relocation table adress (l.byte)
+0019: 00      -   relocation table adress (h.byte)
+001A: 00      -   overlay number (l.byte)
+001B: 00      -   overlay number (h.byte)
+001C: 01      -   signature (l.byte)
+001D: 00      -   signature (h.byte)
+001E: 01      -   relocation table - offset inside segment (l.byte)
+001F: 00      -   relocation table - offset inside segment (h.byte)
+0020: 11      -   relocation table - segment anchor (l.byte)
+0021: 00      -   relocation table - segment anchor (h.byte)
+0022 to 01FF  -   reserved relocation area  (00) 
+
+
+
+
+===================================================================================================

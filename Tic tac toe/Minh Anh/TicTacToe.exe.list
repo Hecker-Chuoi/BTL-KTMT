@@ -1,0 +1,291 @@
+EMU8086 GENERATED LISTING. MACHINE CODE <- SOURCE.
+ 
+TicTacToe.exe -- emu8086 assembler version: 4.08  
+ 
+[ 15/05/2024  --  11:08:01 SA ] 
+ 
+===================================================================================================
+[LINE]     LOC: MACHINE CODE                          SOURCE
+===================================================================================================
+ 
+[   1]        :                                       .model medium
+[   2]        :                                       .stack 100h
+[   3]        :                                       .data
+[   4]    0100: 0D 0A 24                              endl db 13, 10, '$' ; ky tu xuong dong
+[   5]        :                                       ; ky tu X
+[   6]    0103: 81                                    charX db 10000001b
+[   7]    0104: 42                                    db 01000010b
+[   8]    0105: 24                                    db 00100100b
+[   9]    0106: 18                                    db 00011000b
+[  10]    0107: 18                                    db 00011000b
+[  11]    0108: 24                                    db 00100100b
+[  12]    0109: 42                                    db 01000010b
+[  13]    010A: 81                                    db 10000001b
+[  14]        :                                       
+[  15]    010B: 3C                                    charO db 00111100b
+[  16]    010C: 42                                    db 01000010b
+[  17]    010D: 81                                    db 10000001b
+[  18]    010E: 81                                    db 10000001b
+[  19]    010F: 81                                    db 10000001b
+[  20]    0110: 81                                    db 10000001b
+[  21]    0111: 42                                    db 01000010b
+[  22]    0112: 3C                                    db 00111100b
+[  23]        :                                       .code
+[  24]    0120:                                       main proc
+[  25]    0120: B8 10 00                              mov ax, @data
+[  26]    0123: 8E D8                                 mov ds, ax
+[  27]        :                                       
+[  28]        :                                       ; Chuyen doi che do man hinh sang che do 320x200 (256 mau) (13h)
+[  29]    0125: B4 00                                 mov ah, 00h
+[  30]    0127: B0 13                                 mov al, 13h
+[  31]    0129: CD 10                                 int 10h
+[  32]        :                                       
+[  33]        :                                       ; ve bang
+[  34]    012B: E8 11 00                              call draw_board
+[  35]        :                                       
+[  36]        :                                       ; nhap va kiem tra
+[  37]    012E: E8 68 00                              call check_input
+[  38]        :                                       
+[  39]        :                                       ; Cho phim bam de quay lai che do van ban
+[  40]    0131: B4 00                                 mov ah, 00h
+[  41]    0133: CD 16                                 int 16h; thay doi tu int 10h sang 16h de cho phim bam
+[  42]        :                                       
+[  43]        :                                       ; Quay lai che do van ban
+[  44]    0135: B4 00                                 mov ah, 00h
+[  45]    0137: B0 03                                 mov al, 03h
+[  46]    0139: CD 10                                 int 10h
+[  47]        :                                       
+[  48]        :                                       ; Ket thuc chuong trinh
+[  49]    013B: B4 4C                                 mov ah, 4ch
+[  50]    013D: CD 21                                 int 21h
+[  51]        :                                       main endp
+[  52]        :                                       
+[  53]    013F:                                       draw_board proc
+[  54]        :                                       ; ve duong doc
+[  55]    013F: B9 82 00                              mov cx, 130       ; x = 85
+[  56]    0142: E8 3F 00                              call draw_oyline
+[  57]    0145: B9 96 00                              mov cx, 150      ; x = 135
+[  58]    0148: E8 39 00                              call draw_oyline
+[  59]    014B: B9 AA 00                              mov cx, 170      ; x = 185
+[  60]    014E: E8 33 00                              call draw_oyline
+[  61]    0151: B9 BE 00                              mov cx, 190      ; x = 235
+[  62]    0154: E8 2D 00                              call draw_oyline
+[  63]        :                                       
+[  64]        :                                       ; ve duong ngang
+[  65]    0157: BA 46 00                              mov dx, 70       ; y = 25
+[  66]    015A: E8 12 00                              call draw_oxline
+[  67]    015D: BA 5A 00                              mov dx, 90       ; y = 75
+[  68]    0160: E8 0C 00                              call draw_oxline
+[  69]    0163: BA 6E 00                              mov dx, 110      ; y = 125
+[  70]    0166: E8 06 00                              call draw_oxline
+[  71]    0169: BA 82 00                              mov dx, 130      ; y = 175
+[  72]    016C: E8 00 00                              call draw_oxline
+[  73]        :                                       
+[  74]    016F:                                       draw_oxline proc
+[  75]    016F: B9 82 00                              mov cx, 130 ; x bat dau tu 85
+[  76]    0172: 8B C2                                 mov ax, dx ; luu gia tri cua y
+[  77]    0174:                                       draw_ox_loop:
+[  78]    0174: 81 F9 BE 00                           cmp cx, 190
+[  79]    0178: 7D 09                                 jge draw_oxline_end ; neu x >= 235 thi ket thuc
+[  80]        :                                       ;mov bx, cx
+[  81]        :                                       ;mov bh, 0
+[  82]    017A: B4 0C                                 mov ah, 0ch ; chuc nang ve pixel
+[  83]    017C: B0 0F                                 mov al, 15 ; mau trang
+[  84]    017E: CD 10                                 int 10h
+[  85]    0180: 41                                    inc cx ; x++
+[  86]    0181: EB F1                                 jmp draw_ox_loop
+[  87]    0183:                                       draw_oxline_end:
+[  88]    0183: C3                                    ret
+[  89]        :                                       draw_oxline endp
+[  90]        :                                       
+[  91]    0184:                                       draw_oyline proc
+[  92]    0184: BA 46 00                              mov dx, 70 ; y bat dau tu 0
+[  93]    0187: 8B C1                                 mov ax, cx ; luu gia tri cua x
+[  94]    0189:                                       draw_oyline_loop:
+[  95]    0189: 81 FA 82 00                           cmp dx, 130
+[  96]    018D: 7D 09                                 jge draw_oyline_end ; neu y >= 150 thi ket thuc
+[  97]        :                                       ;mov bx, cx
+[  98]        :                                       ;mov bh, 0
+[  99]    018F: B4 0C                                 mov ah, 0ch ; chuc nang ve pixel
+[ 100]    0191: B0 0F                                 mov al, 15 ; mau trang
+[ 101]    0193: CD 10                                 int 10h
+[ 102]    0195: 42                                    inc dx ; ++y
+[ 103]    0196: EB F1                                 jmp draw_oyline_loop
+[ 104]    0198:                                       draw_oyline_end:
+[ 105]    0198: C3                                    ret
+[ 106]        :                                       draw_oyline endp
+[ 107]        :                                       
+[ 108]    0199:                                       check_input proc
+[ 109]        :                                       ; doc 1 ky tu tu ban phim
+[ 110]    0199: B4 01                                 mov ah, 1
+[ 111]    019B: CD 21                                 int 21h
+[ 112]        :                                       
+[ 113]        :                                       ; kiem tra input 1-9
+[ 114]    019D: 3C 31                                 cmp al, '1'
+[ 115]    019F: 7C 74                                 jl input_error
+[ 116]    01A1: 3C 39                                 cmp al, '9'
+[ 117]    01A3: 7F 70                                 jg input_error
+[ 118]        :                                       
+[ 119]    01A5: 3C 31                                 cmp al, '1'
+[ 120]    01A7: 74 20                                 je case_1
+[ 121]        :                                       
+[ 122]    01A9: 3C 32                                 cmp al, '2'
+[ 123]    01AB: 74 24                                 je case_2
+[ 124]        :                                       
+[ 125]    01AD: 3C 33                                 cmp al, '3'
+[ 126]    01AF: 74 28                                 je case_3
+[ 127]        :                                       
+[ 128]    01B1: 3C 34                                 cmp al, '4'
+[ 129]    01B3: 74 2C                                 je case_4
+[ 130]        :                                       
+[ 131]    01B5: 3C 35                                 cmp al, '5'
+[ 132]    01B7: 74 30                                 je case_5
+[ 133]        :                                       
+[ 134]    01B9: 3C 36                                 cmp al, '6'
+[ 135]    01BB: 74 34                                 je case_6
+[ 136]        :                                       
+[ 137]    01BD: 3C 37                                 cmp al, '7'
+[ 138]    01BF: 74 38                                 je case_7
+[ 139]        :                                       
+[ 140]    01C1: 3C 38                                 cmp al, '8'
+[ 141]    01C3: 74 3C                                 je case_8
+[ 142]        :                                       
+[ 143]    01C5: 3C 39                                 cmp al, '9'
+[ 144]    01C7: 74 40                                 je case_9
+[ 145]        :                                       
+[ 146]    01C9:                                       case_1:
+[ 147]    01C9: B9 88 00                              mov cx, 136
+[ 148]    01CC: BA 4C 00                              mov dx, 76
+[ 149]    01CF: EB 40                                 jmp exit
+[ 150]    01D1:                                       case_2:
+[ 151]    01D1: B9 9C 00                              mov cx, 156
+[ 152]    01D4: BA 4C 00                              mov dx, 76
+[ 153]    01D7: EB 38                                 jmp exit
+[ 154]    01D9:                                       case_3:
+[ 155]    01D9: B9 B0 00                              mov cx, 176
+[ 156]    01DC: BA 4C 00                              mov dx, 76
+[ 157]    01DF: EB 30                                 jmp exit
+[ 158]    01E1:                                       case_4:
+[ 159]    01E1: B9 88 00                              mov cx, 136
+[ 160]    01E4: BA 60 00                              mov dx, 96
+[ 161]    01E7: EB 28                                 jmp exit
+[ 162]    01E9:                                       case_5:
+[ 163]    01E9: B9 9C 00                              mov cx, 156
+[ 164]    01EC: BA 60 00                              mov dx, 96
+[ 165]    01EF: EB 20                                 jmp exit
+[ 166]    01F1:                                       case_6:
+[ 167]    01F1: B9 B0 00                              mov cx, 176
+[ 168]    01F4: BA 60 00                              mov dx, 96
+[ 169]    01F7: EB 18                                 jmp exit
+[ 170]    01F9:                                       case_7:
+[ 171]    01F9: B9 88 00                              mov cx, 136
+[ 172]    01FC: BA 74 00                              mov dx, 116
+[ 173]    01FF: EB 10                                 jmp exit
+[ 174]    0201:                                       case_8:
+[ 175]    0201: B9 9C 00                              mov cx, 156
+[ 176]    0204: BA 74 00                              mov dx, 116
+[ 177]    0207: EB 08                                 jmp exit
+[ 178]    0209:                                       case_9:
+[ 179]    0209: B9 B0 00                              mov cx, 176
+[ 180]    020C: BA 74 00                              mov dx, 116
+[ 181]    020F: EB 00                                 jmp exit
+[ 182]        :                                       
+[ 183]    0211:                                       exit:
+[ 184]    0211: E8 34 00                              call draw_o
+[ 185]    0214: C3                                    ret
+[ 186]        :                                       
+[ 187]    0215:                                       input_error:
+[ 188]    0215: C3                                    ret
+[ 189]        :                                       check_input endp
+[ 190]        :                                       
+[ 191]    0216:                                       draw_character proc
+[ 192]    0216: 51                                    push cx
+[ 193]    0217: 52                                    push dx
+[ 194]    0218: 56                                    push si
+[ 195]        :                                       
+[ 196]    0219: BF 08 00                              mov di, 8         ; Chieu cao cua bitmap (8 dong)
+[ 197]    021C:                                       draw_char_row:
+[ 198]    021C: 8A 1C                                 mov bl, [si]      ; lay gia tri byte cua dong hien tai
+[ 199]    021E: B7 08                                 mov bh, 8         ; Chieu rong cua bitmap (8 cot)
+[ 200]    0220: 8B E9                                 mov bp, cx        ; Luu lai x goc
+[ 201]    0222:                                       draw_char_col:
+[ 202]    0222: F6 C3 80                              test bl, 10000000b; kiem tra bit cao nhat trong dong hien tai
+[ 203]    0225: 74 08                                 jz skip_pixel     ; Neu bit là 0, bo qua dong
+[ 204]    0227: B4 0C                                 mov ah, 0ch       ; Chuc nang ve pixel
+[ 205]    0229: B0 0F                                 mov al, 15        ; Màu trang
+[ 206]    022B: B7 00                                 mov bh, 0
+[ 207]    022D: CD 10                                 int 10h
+[ 208]    022F:                                       skip_pixel:
+[ 209]    022F: D0 E3                                 shl bl, 1         ; dich bit sang trai de kiem tra bit tiep theo
+[ 210]    0231: 41                                    inc cx            ; ++x
+[ 211]    0232: FE CF                                 dec bh            ; giam dem cot
+[ 212]    0234: 75 EC                                 jnz draw_char_col ; tiep tuc ve neu con cot
+[ 213]    0236: 42                                    inc dx            ; ++y
+[ 214]    0237: 8B CD                                 mov cx, bp        ; khoi phuc x goc
+[ 215]    0239: 46                                    inc si            ; chuyen sang dong tiep theo
+[ 216]    023A: 4F                                    dec di            ; giam bien dem dong
+[ 217]    023B: 75 DF                                 jnz draw_char_row ; neu con dong, tiep tuc ve
+[ 218]        :                                       
+[ 219]    023D: 5E                                    pop si
+[ 220]    023E: 5A                                    pop dx
+[ 221]    023F: 59                                    pop cx
+[ 222]    0240: C3                                    ret
+[ 223]        :                                       draw_character endp
+[ 224]        :                                       
+[ 225]    0241:                                       draw_x proc
+[ 226]    0241: BE 03 00                              lea si, charX
+[ 227]    0244: E8 CF FF                              call draw_character
+[ 228]    0247: C3                                    ret
+[ 229]        :                                       draw_x endp
+[ 230]        :                                       
+[ 231]    0248:                                       draw_o proc
+[ 232]    0248: BE 0B 00                              lea si, charO
+[ 233]    024B: E8 C8 FF                              call draw_character
+[ 234]    024E: C3                                    ret
+[ 235]        :                                       draw_o endp
+[ 236]        :                                       
+ 
+===================================================================================================
+ 
+EXE HEADER - bytes from 0000 to 01FF inclusive.
+
+0000: 4D      -   exe signature (M)
+0001: 5A      -   exe signature (Z)
+0002: 4F      -   bytes on last page (l.byte)
+0003: 00      -   bytes on last page (h.byte)
+0004: 03      -   512 byte pages in file (l.byte)
+0005: 00      -   512 byte pages in file (h.byte)
+0006: 01      -   relocations (l.byte)
+0007: 00      -   relocations (h.byte)
+0008: 20      -   paragraphs in header (l.byte)
+0009: 00      -   paragraphs in header (h.byte)
+000A: 00      -   minimum memory (l.byte)
+000B: 00      -   minimum memory (h.byte)
+000C: FF      -   maximum memory (l.byte)
+000D: FF      -   maximum memory (h.byte)
+000E: 00      -   SS - stack segment (l.byte)
+000F: 00      -   SS - stack segment (h.byte)
+0010: 00      -   SP - stack pointer (l.byte)
+0011: 01      -   SP - stack pointer (h.byte)
+0012: 16      -   check sum (l.byte)
+0013: 54      -   check sum (h.byte)
+0014: 00      -   IP - instruction pointer (l.byte)
+0015: 00      -   IP - instruction pointer (h.byte)
+0016: 12      -   CS - code segment (l.byte)
+0017: 00      -   CS - code segment (h.byte)
+0018: 1E      -   relocation table adress (l.byte)
+0019: 00      -   relocation table adress (h.byte)
+001A: 00      -   overlay number (l.byte)
+001B: 00      -   overlay number (h.byte)
+001C: 01      -   signature (l.byte)
+001D: 00      -   signature (h.byte)
+001E: 01      -   relocation table - offset inside segment (l.byte)
+001F: 00      -   relocation table - offset inside segment (h.byte)
+0020: 12      -   relocation table - segment anchor (l.byte)
+0021: 00      -   relocation table - segment anchor (h.byte)
+0022 to 01FF  -   reserved relocation area  (00) 
+
+
+
+
+===================================================================================================

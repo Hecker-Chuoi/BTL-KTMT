@@ -1,0 +1,20 @@
+< THE SYMBOL TABLE >  TicTacToe.exe_  --  emu8086 assembler version: 4.08 
+===================================================================================================
+Name                     	Offset    	Size      	Type      	Segment   
+===================================================================================================
+STACK                    	00000     	-5        	SEGMENT   	(ITSELF)  
+DATA                     	00010     	-5        	SEGMENT   	(ITSELF)  
+ENDL                     	00000     	1         	VAR       	data      
+CODE                     	00011     	-5        	SEGMENT   	(ITSELF)  
+MAIN                     	00000     	-1        	NEAR      	code      
+DRAW_BOARD               	0001C     	-1        	NEAR      	code      
+DRAW_OXLINE              	0004C     	-1        	NEAR      	code      
+DRAW_OX_LOOP             	00051     	-1        	LABEL     	code      
+DRAW_OXLINE_END          	00060     	-1        	LABEL     	code      
+DRAW_OYLINE              	00061     	-1        	NEAR      	code      
+DRAW_OYLINE_LOOP         	00066     	-1        	LABEL     	code      
+DRAW_OYLINE_END          	00075     	-1        	LABEL     	code      
+===================================================================================================
+[ 15/05/2024  --  4:18:07 SA ] 
+< END >
+ 
