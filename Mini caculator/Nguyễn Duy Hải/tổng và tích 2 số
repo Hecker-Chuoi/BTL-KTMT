@@ -1,109 +1,118 @@
 .model small
 .stack 100h
 .data
-  tb1 db "nhap vao so thap phan thu nhat: $"
-  tb2 db 10, 13, "ket qua la: $" 
-  tb3 db 10,13, "nhap vao so thap phann thu 2: $"
-x dw ?
-y dw ?
-z dw ?
-t dw ?  
+  tb1 db "Nhap vao so thap phan thu nhat: $"
+  tb2 db 10, 13, "Ket qua la: $" 
+  tb3 db 10, 13, "Nhap vao so thap phan thu 2: $"
+  overflow_msg db 10, 13, "Error: Overflow occurred!$", 10, 13, "$"
+  x dw ?
+  y dw ?
+  z dw ?
+  t dw ?
 .code
 main proc
     mov ax, @data
-    mov ds,ax
+    mov ds, ax
     ;nhap so thu nhat
-    mov ah,9
-    lea dx,tb1
+    mov ah, 9
+    lea dx, tb1
     int 21h
     
     call nhap_so
-    mov ax,x
-    mov z,ax
+    mov ax, x
+    mov z, ax
     
-    ; nhap so thu hai
-    mov ah,9
-    lea dx,tb3
+    ;nhap so thu hai
+    mov ah, 9
+    lea dx, tb3
     int 21h
     
     call nhap_so
-    mov ax,x
-    mov t,ax
+    mov ax, x
+    mov t, ax
     
     ;cong 2 so
-    mov ah,9
-    lea dx,tb2
+    mov ah, 9
+    lea dx, tb2
     int 21h
     
-    mov ax,z
-    add ax,t
-    
-    
-    mov x,ax
+    mov ax, z
+    add ax, t
+    jc overflow    ; Kiem tra co CF (Carry Flag) cho phep cong
+    mov x, ax
     call print
     
     ;tich 2 so
-    mov ah,9
-    lea dx,tb2
+    mov ah, 9
+    lea dx, tb2
     int 21h
     
-    mov ax,z
-    mov bx,t
+    mov ax, z
+    mov bx, t
     mul bx
-    mov x,ax
+    jc overflow    ; Kiem tra co CF (Carry Flag) cho phep nhan
+    mov x, ax
     call print
     
-    mov ah,4
+    ;exit
+    mov ah, 4ch
     int 21h
     
+overflow:
+    mov ah, 9
+    lea dx, overflow_msg
+    int 21h
+    mov ah, 4ch
+    int 21h
+
 main endp
-;ham con
 
 ;nhap so
 nhap_so proc
-    mov x,0
-    mov y,0
-    mov bx,10
+    mov x, 0
+    mov y, 0
+    mov bx, 10
     
     nhap:
-        mov ah,1
+        mov ah, 1
         int 21h
-        cmp al,13
+        cmp al, 13
         je nhapxong
-        sub al,30h
-        xor ah,ah
-        mov y,ax
-        mov ax,x
+        sub al, 30h
+        xor ah, ah
+        mov y, ax
+        mov ax, x
         mul bx
-        add ax,y
-        mov x,ax
+        add ax, y
+        mov x, ax
         jmp nhap
         
     nhapxong:
-        ret    
+        ret
 nhap_so endp
+
 ;hien thi
 print proc
-    mov ax,x
-    mov bx,10
-    mov cx,0
+    mov ax, x
+    mov bx, 10
+    mov cx, 0
     
     chia:
-        mov dx,0
+        mov dx, 0
         div bx
         push dx
         inc cx
-        cmp ax,0
+        cmp ax, 0
         je hienthi
         jmp chia
         
     hienthi:
         pop dx
-        add dl,30h
-        mov ah,2
+        add dl, 30h
+        mov ah, 2
         int 21h
         dec cx
-        cmp cx,0
+        cmp cx, 0
         jne hienthi
         ret
 
