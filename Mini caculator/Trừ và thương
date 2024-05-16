@@ -61,9 +61,10 @@ main proc
     
     mov ax,z
     mov bx,t
+    mov dx,0
     div bx
     mov x,ax
-    call print
+    call print ;in thuong
     
     mov ah,4
     int 21h
