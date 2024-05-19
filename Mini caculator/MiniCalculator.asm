@@ -577,7 +577,7 @@ subtraction_process proc
         mov is_res_signed, 1 
         mov ax,operand2 
         sub ax,operand1         
-    store_subtraction_res 
+    store_subtraction_res: 
         mov res,ax  
     end_subtraction_process: 
         ret 
